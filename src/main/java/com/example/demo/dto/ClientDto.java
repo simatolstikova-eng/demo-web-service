@@ -16,5 +16,13 @@ public class ClientDto {
     private String fullName;
     private String phone;
     private String role;
-    private boolean active;
+    private Boolean active;
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }

@@ -28,7 +28,7 @@ public class AdminController {
         stats.put("totalClients", clientService.getAllClients().size());
         stats.put("totalProducts", productService.getAllProducts().size());
         stats.put("activeClients",
-            clientService.getAllClients().stream().filter(ClientDto::isActive).count());
+            clientService.getAllClients().stream().filter(ClientDto::getActive).count());
         return ResponseEntity.ok(stats);
     }
 

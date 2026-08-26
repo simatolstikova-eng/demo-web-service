@@ -46,17 +46,41 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientDto updateClient(Long id, ClientDto clientDto) {
+        // Временные принты для отладки (без Lombok)
+        System.out.println("=========================================");
+        System.out.println("🔍 updateClient вызван с ID: " + id);
+        System.out.println("🔍 Данные от фронтенда:");
+        System.out.println("   username: " + clientDto.getUsername());
+        System.out.println("   email: " + clientDto.getEmail());
+        System.out.println("   fullName: " + clientDto.getFullName());
+        System.out.println("   phone: " + clientDto.getPhone());
+        System.out.println("=========================================");
+
         Client existingClient = getClientEntity(id);
+        System.out.println("🔍 Существующий клиент в БД:");
+        System.out.println("   fullName: " + existingClient.getFullName());
+        System.out.println("   phone: " + existingClient.getPhone());
+
         clientValidator.validateForUpdate(clientDto, existingClient);
 
+        // Сохраняем новые данные
         existingClient.setFullName(clientDto.getFullName());
         existingClient.setPhone(clientDto.getPhone());
         if (clientDto.getEmail() != null && !clientDto.getEmail().equals(existingClient.getEmail())) {
             existingClient.setEmail(clientDto.getEmail());
         }
 
+        System.out.println("🔍 Клиент ПОСЛЕ изменений:");
+        System.out.println("   fullName: " + existingClient.getFullName());
+        System.out.println("   phone: " + existingClient.getPhone());
+        System.out.println("   email: " + existingClient.getEmail());
+
         Client updatedClient = clientRepository.save(existingClient);
-        log.info("Клиент обновлен с id: {}", updatedClient.getId());
+
+        System.out.println("✅ Клиент сохранён в БД!");
+        System.out.println("   новое имя: " + updatedClient.getFullName());
+        System.out.println("=========================================");
+
         return mapToDto(updatedClient);
     }
 
@@ -86,9 +110,8 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public void deleteClient(Long id) {
         Client client = getClientEntity(id);
-        client.setActive(false);
-        clientRepository.save(client);
-        log.info("Клиент деактивирован с id: {}", id);
+        clientRepository.delete(client);   // ← ПОЛНОЕ УДАЛЕНИЕ
+        log.info("Клиент удалён с id: {}", id);
     }
 
     @Override
@@ -116,7 +139,7 @@ public class ClientServiceImpl implements ClientService {
                 .fullName(client.getFullName())
                 .phone(client.getPhone())
                 .role(client.getRole().name())
-                .active(client.isActive())
+                .active(client.getIsActive())  // ← теперь Boolean
                 .build();
     }
 }

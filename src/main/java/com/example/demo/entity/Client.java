@@ -50,7 +50,15 @@ public class Client implements UserDetails {
     private LocalDateTime updatedAt;
 
     @Column(name = "is_active")
-    private boolean isActive = true;
+    private Boolean isActive = true;
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
 
     @PrePersist
     protected void onCreate() {
