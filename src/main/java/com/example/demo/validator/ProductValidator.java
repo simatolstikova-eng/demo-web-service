@@ -3,7 +3,7 @@ package com.example.demo.validator;
 import com.example.demo.dto.ProductDto;
 import com.example.demo.entity.Product;
 import com.example.demo.exception.DuplicateResourceException;
-import com.example.demo.service.ProductService;
+import com.example.demo.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class ProductValidator {
 
-    private final ProductService productService;
+    private final ProductRepository productRepository;
 
     public void validateForCreate(ProductDto productDto) {
         if (productDto == null) {
@@ -33,7 +33,7 @@ public class ProductValidator {
             throw new IllegalArgumentException("Количество товара должно быть больше или равно 0");
         }
 
-        if (productService.existsByName(productDto.getName())) {
+        if (productRepository.existsByName(productDto.getName())) {
             throw new DuplicateResourceException("Товар уже существует: " + productDto.getName());
         }
     }
@@ -53,7 +53,7 @@ public class ProductValidator {
 
         if (productDto.getName() != null &&
             !productDto.getName().equals(existingProduct.getName()) &&
-            productService.existsByName(productDto.getName())) {
+            productRepository.existsByName(productDto.getName())) {
             throw new DuplicateResourceException("Товар уже существует: " + productDto.getName());
         }
     }

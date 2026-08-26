@@ -3,7 +3,7 @@ package com.example.demo.validator;
 import com.example.demo.dto.ClientDto;
 import com.example.demo.entity.Client;
 import com.example.demo.exception.DuplicateResourceException;
-import com.example.demo.service.ClientService;
+import com.example.demo.repository.ClientRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -12,7 +12,7 @@ import org.springframework.util.StringUtils;
 @RequiredArgsConstructor
 public class ClientValidator {
 
-    private final ClientService clientService;
+    private final ClientRepository clientRepository;
 
     public void validateForCreate(ClientDto clientDto) {
         if (clientDto == null) {
@@ -27,11 +27,11 @@ public class ClientValidator {
             throw new IllegalArgumentException("Email обязателен");
         }
 
-        if (clientService.existsByUsername(clientDto.getUsername())) {
+        if (clientRepository.existsByUsername(clientDto.getUsername())) {
             throw new DuplicateResourceException("Имя пользователя уже существует: " + clientDto.getUsername());
         }
 
-        if (clientService.existsByEmail(clientDto.getEmail())) {
+        if (clientRepository.existsByEmail(clientDto.getEmail())) {
             throw new DuplicateResourceException("Email уже существует: " + clientDto.getEmail());
         }
     }
@@ -43,7 +43,7 @@ public class ClientValidator {
 
         if (clientDto.getEmail() != null &&
             !clientDto.getEmail().equals(existingClient.getEmail()) &&
-            clientService.existsByEmail(clientDto.getEmail())) {
+            clientRepository.existsByEmail(clientDto.getEmail())) {
             throw new DuplicateResourceException("Email уже существует: " + clientDto.getEmail());
         }
     }
