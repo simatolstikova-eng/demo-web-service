@@ -35,7 +35,7 @@ public class ClientServiceImpl implements ClientService {
                 .password(passwordEncoder.encode("default123"))
                 .fullName(clientDto.getFullName())
                 .phone(clientDto.getPhone())
-                .role(Role.ROLE_USER)
+                .role(Role.USER)
                 .isActive(true)
                 .build();
 

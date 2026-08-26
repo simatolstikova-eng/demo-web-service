@@ -21,8 +21,9 @@ public class UserPrincipal implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public static UserPrincipal create(Client client) {
+        // Добавляем префикс ROLE_ для Spring Security
         List<GrantedAuthority> authorities = List.of(
-            new SimpleGrantedAuthority(client.getRole().name())
+            new SimpleGrantedAuthority("ROLE_" + client.getRole().name())
         );
 
         return new UserPrincipal(
