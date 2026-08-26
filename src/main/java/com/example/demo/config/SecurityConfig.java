@@ -30,6 +30,9 @@ public class SecurityConfig {
             .cors(cors -> cors.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authz -> authz
+                // Разрешить доступ к статическим файлам (фронтенд)
+                .requestMatchers("/", "/index.html", "/dashboard.html", "/css/**", "/js/**").permitAll()
+                // API эндпоинты
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .requestMatchers("/api/clients/**").authenticated()
